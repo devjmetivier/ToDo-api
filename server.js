@@ -51,12 +51,11 @@ app.delete('/todos/:id', function (req, res) {
     var todoId = parseInt(req.params.id, 10);
     var matchedTodo = _.findWhere(todos, {id: todoId});
 
-    if (matchedTodo) {
-        todos = _.without(todos, matchedTodo);
-        console.log('Deleted: ' + JSON.stringify(matchedTodo));
-        return res.json(matchedTodo);
+    if (!matchedTodo) {
+        return res.status(404).json({"error": "no todo found with that id"});
     } else {
-        return res.status(400).send();
+        todos = _.without(todos, matchedTodo);
+        return res.json(matchedTodo);
     }
 });
 
